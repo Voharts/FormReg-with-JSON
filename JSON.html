@@ -1,0 +1,265 @@
+
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Sing Up</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+       function valid (form){
+          var firstname = form.firstname.value;
+          var lastname = form.lastname.value;
+          var password = form.password.value;
+          var rePassword = form.rePassword.value;
+          var email = form.email.value;
+          var number = form.number.value;
+          var state = form.state.value;
+          var fail = false;
+
+          var adr_pattern = /[0-9a-z_-]+@[0-9a-z_]+\.[a-z]{2,5}/i;
+
+          if(firstname == "" || firstname == " ")
+              fail = "Вы не ввели свое имя";
+          else if (lastname == "" || lastname == " ") {
+              fail = "Вы не ввели свое имя";
+          }
+          else if (state == "") {
+              fail = "Укажите пол";
+          }
+          else if(number == "" || number == " "){
+              fail = "Вы не ввели возраст";
+          }
+          else if (adr_pattern.test(email) == false) {
+              fail= "email введен не правильно";
+          }
+          else if (password == "") {
+              fail = "Вы не ввели пароль";
+          }
+          else if (password != rePassword) {
+              fail = "Пароли не совпадают";
+          }
+        /*  if(fail){
+            alert(fail);
+            return false;
+          } else {
+            alert(name+" "+password+" "+state );
+            return true;
+          }*/
+
+       }
+    </script>
+
+    <style>
+      .form-container{
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+        /*width: 350px;*/
+        height: 100vh;
+        margin:0 auto;
+      }
+      h2{
+        text-align: center;
+      }
+
+      form{
+        flex-basis: 70vh;
+        padding: 2em;
+        background: #fff;
+        box-shadow: 0 0 2em rgba(0,0,0,0.2);
+        border-radius: 0.25em;
+      }
+
+      input{
+        padding: 0.5em;
+        font-size: 0.875em;
+        background: #f4f4f4;
+        border: 1px solid #ccc;
+        border-width: 0px 0px 2px 0px;
+        border-radius: 0;
+      }
+
+      input: focus{
+        background: #fff;
+        box-shadow: inset 0.1em 0.1em 0.25em rgba(0,0,0,0.2);
+        outline: 0;
+      }
+
+      .form-field{
+        margin-bottom: 1em;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .form-field label{
+        flex: 0 1 4em;
+        background: #fff;
+        font-size: 1em;
+        text-align: center;
+        text-shadow: 0 1em 0 #fff;
+        line-height: 3;
+      }
+
+      .form-field input{
+        flex-grow: 1;
+      }
+
+      .form-field input, .multi-input input:last-child{
+      border-radius: 0 0.25em 0.25em 0;
+      }
+
+      .submit-field{
+        flex-direction: row;
+        justify-content: center;
+      }
+
+      input[type="button"]{
+        flex: 0 1 40%;
+        padding: 0.8em;
+        font-size: 1.2rem;
+        text-shadow: 0 1px 0 #fff;
+        background: #689CD2;
+        border-radius: 0.25em;
+        border: 0;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+
+       input[type="radio"]{
+        flex: 0 1 1em;
+        background: #fff;
+        font-size: 1em;
+        display: block;
+        width: auto;
+        margin: auto;
+      }
+
+      span{
+        flex: 0 1 1em;
+        padding: 1em;
+        background: #fff;
+        font-size: 1em;
+        text-align: center;
+        text-shadow: 0 1em 0 #fff;
+
+      }
+
+      body{background: grey;}
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="form-container">
+
+          <form method="post" mane="simpleForm" id="simpleForm">
+            <h2>Sign up</h2>
+          <div class="form-field multi-input">
+              <input type="text" name="firstname" placeholder="first name" id="firstname">
+              <input type="text" name="lastname" placeholder="last name" id="lastname">
+          </div>
+            <div class="form-field multi-input">
+              <span>Gender</span>
+              <input type="radio" name="state1" id="Male" value="Male">
+              <label for="male">Male</label>
+              <input type="radio" name="state2" id="Female" value="Female">
+              <label for="female">Female</label>
+              <span>Age</span>
+              <input type="number" size="3" name="number" id="numder" min="10" max="100">
+          </div>
+          <div class="form-field multi-input">
+              <input type="email" name="email" placeholder="email" id="email">
+          </div>
+          <div class="form-field multi-input">
+              <input type="password" name="password" placeholder="password" id="password">
+              <input type="password" name="rePassword" placeholder="confirm password" id="rePassword">
+          </div>
+              <input type="submit"  onclick="sendJSON()" id="submit" value="Sign Up"/>
+              <input type="submit"  onclick="editJSON()" id="submit1" value="reSign Up"/>
+
+        </form>
+          <p class="result" style="color:blue"></p>
+       </div>
+
+
+
+        <script>
+
+      var res; var newData; var sendData; // эта функция сработает при нажатии на кнопку
+      function sendJSON()
+      { // с помощью jQuery обращаемся к элементам на странице по их именам
+      /*  let firstname = document.querySelector('#firstname');
+        let lastname = document.querySelector('#lastname');*/
+
+          var form = document.getElementById('simpleForm');
+          var data = {}; //переменная для сбора данных из формы
+
+          for (var i = 0, len = form.length; i < len; i++) {
+              var input = form[i];
+              if (input.name) {
+                  data[input.name] = input.value;
+              }
+          }
+            var jsonStr = JSON.stringify(data);
+            console.log(data, jsonStr);
+        // а вот сюда мы поместим ответ от сервера
+        let result = document.querySelector('#result');
+        // создаём новый экземпляр запроса XHR
+        let xhr = new XMLHttpRequest();
+        // адрес, куда мы отправим нашу JSON-строку
+        let url = "http://formreg.ru/json.php";
+        // открываем соединение
+        xhr.open("POST", url, true); // устанавливаем заголовок — выбираем тип контента, который отправится на сервер, в нашем случае мы явно пишем, что это JSON //
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8'); // когда придёт ответ на наше обращение к серверу, мы его обработаем здесь
+        xhr.onreadystatechange = function()
+        { // если запрос принят и сервер ответил, что всё в порядке
+          if (xhr.readyState === 4 && xhr.status === 200) { // запоминаем данные, которые пришли с сервера
+            res = this.responseText; // выводим то, что ответил нам сервер — так мы убедимся, что данные он получил правильно
+
+              //window.alert(res);
+          //  document.getElementById("demo").innerHTML = res;
+            result.innerHTML = xhr.responseText;
+          }
+        }; // преобразуем наши данные в JSON-строку
+      /*  data = JSON.stringify({ "firstname": firstname.value, "lastname": lastname.value });*/
+        // когда всё готово, отправляем JSO на сервер
+      /*  xhr.send(data);*/
+        xhr.send(jsonStr);
+        window.open("http://formreg.ru/JSONWINDOW.html");
+      }
+
+
+         function editJSON()
+        { // переводим данные от сервера в массив, понятный для JavaScript
+           newData = JSON.parse(res).map(Object.values);
+           // добавляем к каждому имени число с его длиной в скобках
+           for (var i = newData.length - 1; i >= 0; i--) {
+              newData[i][0].name = newData[i][0].name + '(' + newData[i][0].name.length + ')';
+              console.log(newData[i][0].name);
+         }
+          // а вот сюда мы поместим ответ от сервера
+          let result = document.querySelector('#result');
+          // создаём новый экземпляр запроса XHR
+          let xhr = new XMLHttpRequest();
+          // адрес, куда мы отправим нашу JSON-строку
+          let url = "http://formreg.ru/edit.php";
+          // открываем соединение
+          xhr.open("POST", url, true);
+          // устанавливаем заголовок — выбираем тип контента, который отправится на сервер, в нашем случае мы явно пишем, что это JSON //
+          xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8' );
+          // когда придёт ответ на наше обращение к серверу, мы его обработаем здесь
+          xhr.onreadystatechange = function ()
+          { // если запрос принят и сервер ответил, что всё в порядке
+            if (xhr.readyState === 4 && xhr.status === 200)
+            { alert(xhr.responseText); // выводим то, что ответил нам сервер, — так мы убедимся, что данные он получил правильно
+              result.innerHTML = this.responseText;
+            }
+          }; // преобразуем наши новые данные JSON в строку
+          sendData = JSON.stringify(newData); // когда всё готово, отправляем JSON на сервер
+          xhr.send(sendData); }
+        </script>
+  </body>
+
+</html>

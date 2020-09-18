@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script type="text/javascript" src="http://formreg.ru/data.json"></script>
+    <script type="text/javascript">
+  /*  var fs=require('fs');*/
+var data=readFileSync('data.json', 'utf8');
+var words=JSON.parse(data);
+var bodyparser=require('body-parser');
+console.log(words);
+var express=require('express');
+
+var app=express();
+
+var server=app.listen(3030,listening);
+
+function listening(){
+console.log("listening..");
+}
+app.use(express.static('website'));
+app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json());
+</script>
+  </head>
+  <body>
+    <ul id="mes"></ul>
+  </body>
+</html>
